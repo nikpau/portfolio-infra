@@ -1,0 +1,23 @@
+services:
+    libdse-api:
+      image: ghcr.io/nikpau/libdse:latest
+      restart: unless-stopped
+    
+    caddy-gateway:
+      image: caddy:latest
+      restart: unless-stopped
+      ports:
+        - "80:80"
+        - "443:443"
+        - "443:443/udp" # HTTP/3 support
+      volumes:
+        - ./Caddyfile:/etc/caddy/Caddyfile
+        - caddy_data:/data
+        - caddy_config:/config
+        - ${PORTFOLIO_STATIC_HTML_TARGET}:/srv/frontend:ro # Mount static HTML files as read-only
+      depends_on:
+        - libdse-api
+
+volumes:
+  caddy_data:
+  caddy_config:
