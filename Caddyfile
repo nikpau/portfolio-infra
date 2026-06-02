@@ -1,6 +1,13 @@
 # LibDSE API backend
 {$LIBDSE_API_URL} {
 	encode gzip zstd
+	rate_limit {
+		zone api_per_ip {
+			key    {remote_host}
+			events 1
+			window 1s
+		}
+	}
 	reverse_proxy {$LIBDSE_API_BACKEND}
 }
 

@@ -1,0 +1,10 @@
+# Build a custom Caddy binary with the rate-limit module.
+# xcaddy compiles Caddy from source with the requested plugins, then the
+# resulting binary is dropped into a clean caddy:latest image.
+FROM caddy:builder AS builder
+
+RUN xcaddy build \
+    --with github.com/mholt/caddy-ratelimit
+
+FROM caddy:latest
+COPY --from=builder /usr/bin/caddy /usr/bin/caddy

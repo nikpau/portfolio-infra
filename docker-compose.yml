@@ -6,7 +6,9 @@ services:
         - /opt/speech-enhancement/data:/app/data:ro
     
     caddy-gateway:
-      image: caddy:latest
+      build:
+        context: .
+        dockerfile: Dockerfile.caddy
       restart: unless-stopped
       env_file:
         - .env
