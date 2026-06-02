@@ -1,0 +1,12 @@
+# LibDSE API backend
+${LIBDSE_API_URL} {
+	encode gzip zstd
+	reverse_proxy ${LIBDSE_API_BACKEND}
+}
+
+# Static Frontend
+${PORTFOLIO_FRONTEND_URL} {
+	root * /srv/frontend
+	file_server
+	try_files {path} {path}/ /index.html
+}
