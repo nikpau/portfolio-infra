@@ -6,6 +6,8 @@ services:
     caddy-gateway:
       image: caddy:latest
       restart: unless-stopped
+      env_file:
+        - .env
       ports:
         - "80:80"
         - "443:443"
