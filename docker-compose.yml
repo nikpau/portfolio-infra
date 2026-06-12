@@ -22,7 +22,7 @@ services:
         - caddy_config:/config
         - ${PORTFOLIO_STATIC_HTML_TARGET}:/srv/frontend:ro # Mount static HTML files as read-only
         - ${CADDY_LOG_DIR}:/logs # Mount host directory for Caddy logs
-        - stats_html:/srv/frontend/stats:ro # Mount stats HTML files as read-only
+        - stats_html:/srv/stats:ro # Mount stats HTML files as read-only
       depends_on:
         - libdse-api
     
