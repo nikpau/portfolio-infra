@@ -31,7 +31,7 @@
 	}
 
     # Tell Caddy where GoAccess is putting the HTML file
-    root * /srv/stats
+    root * /srv/frontend/stats
     file_server
 
     # Crucial step: Proxy the real-time websocket back to GoAccess
