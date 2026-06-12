@@ -21,9 +21,31 @@ services:
         - caddy_data:/data
         - caddy_config:/config
         - ${PORTFOLIO_STATIC_HTML_TARGET}:/srv/frontend:ro # Mount static HTML files as read-only
+        - ${CADDY_LOG_DIR}:/logs # Mount host directory for Caddy logs
+        - stats_html:/srv/stats:ro # Mount stats HTML files as read-only
       depends_on:
         - libdse-api
+    
+    goaccess:
+      image: allinurl/goaccess:latest
+      restart: unless-stopped
+      network_mode: "service:caddy-gateway" # Share network with Caddy for WebSocket support
+      ports:
+        - "${STATS_PORT}:${STATS_PORT}"
+      volumes:
+        - ${CADDY_LOG_DIR}:/logs:ro # Mount Caddy logs as read-only for GoAccess
+        - stats_html:/srv/stats # Mount a volume for GoAccess to output HTML stats
+      environment:
+        - TZ=Europe/Berlin
+      command: >
+        /logs/access.json
+        --port=${STATS_PORT}
+        --log-format=CADDY
+        --real-time-html
+        --output=/srv/stats/index.html
+        --ws-url=${STATS_WS_URL}
 
 volumes:
   caddy_data:
   caddy_config:
+  stats_html:

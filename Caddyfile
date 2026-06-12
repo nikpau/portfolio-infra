@@ -16,4 +16,24 @@
 	root * /srv/frontend
 	file_server
 	try_files {path} {path}/ /index.html
+
+	log {
+		output file /logs/access.json
+		format json
+	}
+}
+
+# Stats Dashboard
+{$STATS_URL} {
+
+	basic_auth {
+		{$STATS_USERNAME} $2a$14$l/Nwz6gjtHGph2Obx2LBPuRQkvyn.jaa2zWPSXk7ia7oWH67oXHLq
+	}
+
+    # Tell Caddy where GoAccess is putting the HTML file
+    root * /srv/stats
+    file_server
+
+    # Crucial step: Proxy the real-time websocket back to GoAccess
+    reverse_proxy /ws {$STATS_WEBSOCKET_BACKEND}
 }
