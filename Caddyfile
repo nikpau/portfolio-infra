@@ -37,3 +37,9 @@
     # Crucial step: Proxy the real-time websocket back to GoAccess
     reverse_proxy /ws {$STATS_WEBSOCKET_BACKEND}
 }
+
+# Cyber Incident Dashboard
+{$CYBER_INCIDENTS_URL} {
+	encode gzip zstd
+	reverse_proxy {$CYBER_INCIDENTS_BACKEND}
+}

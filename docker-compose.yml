@@ -25,6 +25,18 @@ services:
         - stats_html:/srv/stats:ro # Mount stats HTML files as read-only
       depends_on:
         - libdse-api
+
+    cyber-incidents:
+      image: ghcr.io/nikpau/cyber-incidents:latest
+      restart: unless-stopped
+      env_file:
+        - .env
+      healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:8050/"]
+        interval: 30s
+        timeout: 10s
+        retries: 3
+        start_period: 1m30s # Wait for app cache to warm up before starting health checks
     
     goaccess:
       image: allinurl/goaccess:latest
